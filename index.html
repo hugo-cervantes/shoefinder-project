@@ -107,25 +107,121 @@ body{
 .shoe-price{font-weight:700;color:#764ba2;}
 .questionnaire{max-width:600px;margin:0 auto;text-align:center;}
 .question{margin-bottom:25px;}
+
+.size-input-group{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:8px;
+  flex-wrap:wrap;
+}
+.size-number-input{
+  width:90px;
+  height:36px;
+  padding:0 10px;
+  border:2px solid #e0e0e0;
+  border-radius:8px;
+  font-size:0.95em;
+  outline:none;
+  transition:border-color 0.2s;
+}
+.size-number-input:focus{border-color:#667eea;}
+.size-unit-toggle{
+  display:flex;
+  border:2px solid #e0e0e0;
+  border-radius:8px;
+  overflow:hidden;
+}
+.size-unit-toggle button{
+  padding:4px 12px;
+  border:none;
+  background:white;
+  cursor:pointer;
+  font-size:0.85em;
+  font-weight:600;
+  color:#666;
+  transition:background 0.2s,color 0.2s;
+}
+.size-unit-toggle button.active{
+  background:#667eea;
+  color:white;
+}
+.size-hint{
+  font-size:0.78em;
+  color:#888;
+  margin-top:4px;
+}
+.q-size-wrapper{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+}
+.q-size-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.q-size-input{
+  width:100px;
+  height:44px;
+  padding:0 12px;
+  border:2px solid #e0e0e0;
+  border-radius:8px;
+  font-size:1.1em;
+  text-align:center;
+  outline:none;
+  transition:border-color 0.2s;
+}
+.q-size-input:focus{border-color:#667eea;}
+.q-unit-toggle{
+  display:flex;
+  border:2px solid #e0e0e0;
+  border-radius:8px;
+  overflow:hidden;
+}
+.q-unit-toggle button{
+  padding:8px 16px;
+  border:none;
+  background:white;
+  cursor:pointer;
+  font-size:0.9em;
+  font-weight:600;
+  color:#666;
+  transition:background 0.2s,color 0.2s;
+}
+.q-unit-toggle button.active{
+  background:#667eea;
+  color:white;
+}
+.size-badge{
+  display:inline-block;
+  background:#f0f0f0;
+  border-radius:6px;
+  padding:3px 10px;
+  font-size:0.82em;
+  color:#555;
+  margin-top:4px;
+}
 </style>
 </head>
 <body>
-
+ 
 <div class="container">
-
+ 
 <div class="header">
 <h1>SoleMate</h1>
 <p>Find the perfect shoes for your feet</p>
 </div>
-
+ 
 <div class="content">
-
+ 
 <div id="catalogScreen" class="screen active">
-
+ 
   <!-- Top Controls: Filter button, Search bar, Questionnaire button -->
   <div class="top-controls">
   <button class="btn filter-toggle" onclick="toggleFilters()">Filter</button>
-
+ 
   <div style="position:relative;">
     <button class="btn" onclick="toggleSort()">Sort by</button>
     <div id="sortPanel" class="filter-panel" style="position:absolute;top:45px;left:0;display:none;min-width:160px;z-index:10;">
@@ -135,14 +231,14 @@ body{
       <div class="option" onclick="setSort('price-desc')">Price High→Low</div>
     </div>
   </div>
-
+ 
   <input type="text" id="shoeSearch" placeholder="Search shoes..." 
          oninput="displayShoes()" 
          style="flex:1; min-width:200px; max-width:400px; height:40px; padding:0 12px; border-radius:6px; border:1px solid #ccc;">
-
+ 
   <button class="btn" onclick="goToQuestionnaire()">Personalize Shoes</button>
 </div>
-
+ 
   <!-- Filter Panel -->
   <div id="filterPanel" class="filter-panel">
     <label>
@@ -155,7 +251,7 @@ body{
         <option value="extra-wide">Extra Wide</option>
       </select>
     </label>
-
+ 
     <label style="margin-top:10px; display:block;">
       Activity:
       <select id="activityFilter" onchange="setFilter('activity', this.value)">
@@ -166,7 +262,7 @@ body{
         <option value="sports">Sports</option>
       </select>
     </label>
-
+ 
     <label style="margin-top:10px; display:block;">
       Gender:
       <select id="genderFilter" onchange="setFilter('gender', this.value)">
@@ -175,18 +271,40 @@ body{
         <option value="women">Women</option>
       </select>
     </label>
+ 
+    <!-- NEW -->
+    <div style="margin-top:14px;">
+      <label style="font-weight:500;color:#444;font-size:0.95em;display:block;margin-bottom:6px;">Shoe Size:</label>
+      <div class="size-input-group">
+        <input
+          type="number"
+          class="size-number-input"
+          id="filterSizeInput"
+          placeholder="e.g. 10"
+          min="4" max="18" step="0.5"
+          oninput="setFilter('size', this.value)"
+        >
+        <div class="size-unit-toggle">
+          <button id="filterUnitUS" class="active" onclick="setFilterUnit('US')">US</button>
+          <button id="filterUnitEU" onclick="setFilterUnit('EU')">EU</button>
+          <button id="filterUnitUK" onclick="setFilterUnit('UK')">UK</button>
+        </div>
+        <button onclick="clearFilterSize()" style="background:none;border:1px solid #ccc;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:0.82em;color:#666;">Clear</button>
+      </div>
+      <div class="size-hint">Leave blank to show all sizes. Sizes matched within ±0.5.</div>
+    </div>
   </div>
-
+ 
   <div id="recommendationBox" style="margin-bottom:20px;"></div>
-
+ 
   <div class="shoes-grid" id="shoesGrid"></div>
-
+ 
 </div>
-
+ 
 <div id="questionnaireScreen" class="screen">
 <div class="questionnaire">
 <h2>Find Your Perfect Fit</h2>
-
+ 
 <div class="question">
 <h3>Activity</h3>
 <div class="options" id="qPurpose">
@@ -196,7 +314,7 @@ body{
   <div class="option" onclick="selectQ('purpose','sports',this)">Sports</div>
 </div>
 </div>
-
+ 
 <div class="question">
 <h3>Width</h3>
 <div class="options" id="qWidth">
@@ -206,7 +324,7 @@ body{
 <div class="option" onclick="selectQ('width','extra-wide',this)">Extra Wide</div>
 </div>
 </div>
-
+ 
 <div class="question">
 <h3>Gender</h3>
 <div class="options" id="qGender">
@@ -214,25 +332,48 @@ body{
 <div class="option" onclick="selectQ('gender','women',this)">Women</div>
 </div>
 </div>
-
+ 
+<div class="question">
+  <h3>Shoe Size <span style="font-size:0.75em;font-weight:400;color:#888;">(optional)</span></h3>
+  <div class="q-size-wrapper">
+    <div class="q-size-row">
+      <input
+        type="number"
+        class="q-size-input"
+        id="qSizeInput"
+        placeholder="e.g. 10"
+        min="4" max="18" step="0.5"
+        oninput="onQSizeChange()"
+      >
+      <div class="q-unit-toggle">
+        <button id="qUnitUS" class="active" onclick="setQUnit('US')">US</button>
+        <button id="qUnitEU" onclick="setQUnit('EU')">EU</button>
+        <button id="qUnitUK" onclick="setQUnit('UK')">UK</button>
+      </div>
+    </div>
+    <div id="qSizeConversion" class="size-badge" style="display:none;"></div>
+    <div class="size-hint">Enter your size to filter shoes that carry your size. Leave blank to see all.</div>
+  </div>
+</div>
+ 
 <div class="btn-container">
 <button class="btn" id="submitQ" onclick="submitQuestionnaire()" disabled>Show Recommendations</button>
 </div>
 </div>
 </div>
-
+ 
 </div>
 </div>
-
+ 
 <script>
 let shoes = [];
-let userPref = { purpose:null, width:null, gender:null };
-let filter = { width:'all', activity:'all', gender:'all' };
+let userPref = { purpose:null, width:null, gender:null, size:null, sizeUnit:'US' }; // NEW: size, sizeUnit
+let filter = { width:'all', activity:'all', gender:'all', size:null, sizeUnit:'US' }; // NEW: size, sizeUnit
 let showUserPref = false;
 let currentSort = 'alpha-asc';
-
+ 
 document.addEventListener('DOMContentLoaded', loadShoes);
-
+ 
 async function loadShoes(){
     try{
         const res = await fetch('nike-shoes.json');
@@ -240,33 +381,96 @@ async function loadShoes(){
         displayShoes();
     }catch(e){console.error(e);}
 }
-
+ 
 function toggleFilters(){
     document.getElementById('filterPanel').classList.toggle('show');
 }
-
+ 
 function setFilter(type, value){
     filter[type] = value;
     showUserPref = false; // This for unpersonalized shoes
     displayShoes();
 }
-
+ 
+// NEW
+function setFilterUnit(unit){
+    filter.sizeUnit = unit;
+    ['US','EU','UK'].forEach(u => {
+        document.getElementById('filterUnit' + u).classList.toggle('active', u === unit);
+    });
+    const val = document.getElementById('filterSizeInput').value;
+    filter.size = val !== '' ? val : null;
+    displayShoes();
+}
+ 
+function clearFilterSize(){
+    document.getElementById('filterSizeInput').value = '';
+    filter.size = null;
+    displayShoes();
+}
+ 
 function goToQuestionnaire(){
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById('questionnaireScreen').classList.add('active');
 }
-
+ 
 function selectQ(type, value, el){
     const capType = type.charAt(0).toUpperCase() + type.slice(1);
     document.querySelectorAll(`#q${capType} .option`).forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
-
     userPref[type] = value;
-
-    // This is to only allow filters if all fields are selected
+    updateSubmitBtn(); // NEW: was inline, now a function
+}
+ 
+function onQSizeChange(){
+    const val = document.getElementById('qSizeInput').value;
+    userPref.size = val !== '' ? val : null;
+    const badge = document.getElementById('qSizeConversion');
+    if(val !== ''){
+        badge.textContent = conversionLabel(val, userPref.sizeUnit);
+        badge.style.display = 'inline-block';
+    } else {
+        badge.style.display = 'none';
+    }
+    updateSubmitBtn();
+}
+ 
+function setQUnit(unit){
+    userPref.sizeUnit = unit;
+    ['US','EU','UK'].forEach(u => {
+        document.getElementById('qUnit' + u).classList.toggle('active', u === unit);
+    });
+    onQSizeChange();
+}
+ 
+function updateSubmitBtn(){
+    // Size is optional — only purpose, width, gender are required
     document.getElementById('submitQ').disabled = !(userPref.purpose && userPref.width && userPref.gender);
 }
-
+ 
+function usToEu(us){ return Math.round((parseFloat(us) + 31.5) * 2) / 2; }
+function euToUs(eu){ return Math.round((parseFloat(eu) - 31.5) * 2) / 2; }
+function usToUk(us){ return Math.round((parseFloat(us) - 1) * 2) / 2; }
+function ukToUs(uk){ return Math.round((parseFloat(uk) + 1) * 2) / 2; }
+ 
+function toUSSize(value, unit){
+    const v = parseFloat(value);
+    if(isNaN(v)) return null;
+    if(unit === 'US') return v;
+    if(unit === 'EU') return euToUs(v);
+    if(unit === 'UK') return ukToUs(v);
+    return v;
+}
+ 
+function conversionLabel(value, unit){
+    const v = parseFloat(value);
+    if(isNaN(v)) return '';
+    if(unit === 'US') return `EU ${usToEu(v)} · UK ${usToUk(v)}`;
+    if(unit === 'EU') return `US ${euToUs(v)} · UK ${usToUk(euToUs(v))}`;
+    if(unit === 'UK') return `US ${ukToUs(v)} · EU ${usToEu(ukToUs(v))}`;
+    return '';
+}
+ 
 function submitQuestionnaire(){
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById('catalogScreen').classList.add('active');
@@ -274,52 +478,77 @@ function submitQuestionnaire(){
     showRecommendation();
     displayShoes();
 }
-
+ 
 function showRecommendation(){
     const purposeText={running:'running',casual:'casual',hiking:'hiking',sports:'sports'};
     const widthText={narrow:'narrow',medium:'medium',wide:'wide','extra-wide':'extra-wide'};
+    const sizeText = userPref.size ? `, size <strong>${userPref.size} ${userPref.sizeUnit}</strong>` : ''; // NEW
     document.getElementById('recommendationBox').innerHTML =
-        `<p>Based on your choices: <strong>${purposeText[userPref.purpose]}</strong> for <strong>${widthText[userPref.width]}</strong> (${userPref.gender}), here are your best options:</p>`;
+        `<p>Based on your choices: <strong>${purposeText[userPref.purpose]}</strong> for <strong>${widthText[userPref.width]}</strong> (${userPref.gender}${sizeText}), here are your best options:</p>`;
 }
-
+ 
 function toggleSort(){
     const panel = document.getElementById('sortPanel');
     panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
 }
-
+ 
 function setSort(sortType){
     currentSort = sortType;
-
+ 
     document.querySelectorAll('#sortPanel .option').forEach(o => o.classList.remove('selected'));
     document.querySelector(`#sortPanel .option[onclick="setSort('${sortType}')"]`).classList.add('selected');
-
+ 
     document.getElementById('sortPanel').style.display = 'none';
     displayShoes();
 }
+ 
 function displayShoes(){
     const grid = document.getElementById('shoesGrid');
     const searchTerm = document.getElementById('shoeSearch').value.toLowerCase();
     grid.innerHTML = '';
-
+ 
+    // NEW: resolve size to US for comparison
+    const rawSize  = showUserPref ? userPref.size    : filter.size;
+    const sizeUnit = showUserPref ? userPref.sizeUnit : filter.sizeUnit;
+    const targetUS = toUSSize(rawSize, sizeUnit);
+ 
     let filtered = shoes.filter(s => {
         const activeFilter = showUserPref ? userPref : filter;
-
+ 
+        // NEW: size match
+        let sizeMatch = true;
+        if(targetUS !== null && Array.isArray(s.sizes) && s.sizes.length > 0){
+            sizeMatch = s.sizes.some(sz => Math.abs(parseFloat(sz) - targetUS) <= 0.5);
+        }
+ 
         return (
             (activeFilter.width === 'all' || s.width === activeFilter.width) &&
             (activeFilter.activity === 'all' || s.category === (activeFilter.purpose || activeFilter.activity)) &&
             (activeFilter.gender === 'all' || s.gender === activeFilter.gender) &&
-            s.name.toLowerCase().includes(searchTerm)
+            s.name.toLowerCase().includes(searchTerm) &&
+            sizeMatch // NEW
         );
     });
-
+ 
     filtered.sort((a,b) => {
         if(currentSort === 'alpha-asc') return a.name.localeCompare(b.name);
         if(currentSort === 'alpha-desc') return b.name.localeCompare(a.name);
         if(currentSort === 'price-asc') return a.price - b.price;
         if(currentSort === 'price-desc') return b.price - a.price;
     });
-
+ 
+    // NEW: empty state
+    if(filtered.length === 0){
+        grid.innerHTML = `<p style="color:#888;grid-column:1/-1;text-align:center;padding:40px 0;">No shoes match your criteria. Try adjusting your filters.</p>`;
+        return;
+    }
+ 
     filtered.forEach(s=>{
+        // NEW: sizes preview
+        const sizesDisplay = Array.isArray(s.sizes) && s.sizes.length
+            ? `<div style="margin-top:6px;font-size:0.78em;color:#666;">Sizes: ${s.sizes.slice(0,6).join(', ')}${s.sizes.length > 6 ? ' …' : ''}</div>`
+            : '';
+ 
         const card = document.createElement('div');
         card.className = 'shoe-card';
         card.innerHTML = `
@@ -333,6 +562,7 @@ function displayShoes(){
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
             <div class="shoe-price">$${s.price}</div>
           </div>
+          ${sizesDisplay}
         `;
         grid.appendChild(card);
     });
@@ -340,3 +570,4 @@ function displayShoes(){
 </script>
 </body>
 </html>
+ 

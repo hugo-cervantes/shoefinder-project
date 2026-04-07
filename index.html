@@ -8,65 +8,145 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  background:linear-gradient(135deg,#fff,#FFFDF2);
+  background:linear-gradient(145deg,#e9eff7 0%,#f6f7fb 55%,#fcf9f3 100%);
   min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
+  margin:0;
+  padding:0;
+  color:#1f2937;
 }
 .container{
-  background:#FFFDF2;
-  border-radius:20px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.3);
-  max-width:1200px;
+  background:rgba(255,255,255,0.96);
+  border-radius:0;
+  box-shadow:none;
   width:100%;
-  overflow:hidden;
+  min-height:100vh;
 }
 .header{
-  background:#000;
+  background:#1f2937;
   color:white;
-  padding:30px;
-  text-align:center;
+  padding:20px 60px 18px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:nowrap;
 }
-.header h1{font-size:2.5em;margin-bottom:10px;}
-.content{padding:40px;}
+.home-link{
+  display:inline-flex;
+  flex-direction:column;
+  text-decoration:none;
+  color:inherit;
+  background:transparent;
+  border:none;
+  padding:0;
+  cursor:pointer;
+}
+.home-link:hover .header-title,
+.home-link:focus .header-title{
+  opacity:0.94;
+}
+.home-link:hover .header-subtitle,
+.home-link:focus .header-subtitle{
+  opacity:0.88;
+}
+.header h1{font-size:3rem;margin-bottom:2px;}
+.header p{color:#cbd5e1;margin-top:2px;font-size:1rem;}
+.content{padding:40px 60px 80px;max-width:1200px;margin:0 auto;}
 .screen{display:none;}
 .screen.active{display:block;}
 .btn{
-  padding:12px 28px;
-  background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+  padding:12px 26px;
+  background:linear-gradient(135deg,#5f7dff 0%,#6b4fc6 100%);
   color:white;
   border:none;
-  border-radius:8px;
-  font-weight:600;
+  border-radius:12px;
+  font-weight:700;
   cursor:pointer;
   margin:5px;
-  height:40px;
-  display:flex;
+  min-height:44px;
+  display:inline-flex;
   align-items:center;
   justify-content:center;
+  box-shadow:0 12px 24px rgba(102,126,234,0.18);
+  transition:transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+  text-decoration: none;
 }
-.btn:hover{transform:translateY(-2px);}
+.btn:hover{transform:translateY(-2px);box-shadow:0 18px 32px rgba(102,126,234,0.24);opacity:0.98;}
+.btn-secondary{
+  background:rgba(255,255,255,0.16);
+  color:white;
+  border:1px solid rgba(255,255,255,0.18);
+  box-shadow:none;
+}
+.btn-secondary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 18px 32px rgba(255,255,255,0.14);
+}
 .top-controls{
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:10px;
-  margin:15px 0;
-  flex-wrap:wrap;
+  gap:12px;
+  flex-wrap:nowrap;
+  flex:1;
+}
+.left-buttons, .right-buttons{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.search-input{
+  flex:1;
+  min-width:220px;
+  max-width:420px;
+  height:44px;
+  padding:0 14px;
+  border-radius:14px;
+  border:1px solid rgba(148,163,184,0.4);
+  background:white;
+  color:#0f172a;
+  transition:box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.search-input:focus{
+  outline:none;
+  border-color:#5f7dff;
+  box-shadow:0 0 0 4px rgba(95,125,255,0.12);
 }
 .filter-toggle{
-  margin-top:4px; /* aligns better with input and other button */
+  margin-top:4px;
 }
 .filter-panel{
   display:none;
   background:#f8f9ff;
-  padding:20px;
-  border-radius:10px;
+  padding:24px;
+  border-radius:18px;
   margin-bottom:20px;
+  border:1px solid rgba(101,126,234,0.18);
 }
 .filter-panel.show{display:block;}
+.filter-panel label{
+  display:block;
+  font-weight:600;
+  margin-bottom:10px;
+  color:#334155;
+}
+.filter-panel select{
+  width:100%;
+  margin-top:8px;
+  padding:12px 14px;
+  border-radius:14px;
+  border:1px solid rgba(148,163,184,0.35);
+  background:white;
+  font-size:0.98rem;
+  color:#0f172a;
+  transition:box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.filter-panel select:focus{
+  outline:none;
+  border-color:#5f7dff;
+  box-shadow:0 0 0 4px rgba(95,125,255,0.12);
+}
 .options{display:grid;gap:10px;}
 .option{
   padding:10px 15px;
@@ -86,25 +166,25 @@ body{
   gap:20px;
 }
 .shoe-card{
-  border:2px solid #e0e0e0;
-  border-radius:12px;
-  padding:15px;
+  border:2px solid rgba(148,163,184,0.28);
+  border-radius:16px;
+  padding:18px;
   background:white;
-  transition:0.3s;
+  transition:transform 0.3s ease,box-shadow 0.3s ease,border-color 0.3s ease;
 }
 .shoe-card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  transform:translateY(-4px);
+  box-shadow:0 18px 35px rgba(15,23,42,0.12);
   border-color:#667eea;
 }
 .shoe-image img{
   width:100%;
-  height:180px;
+  height:200px;
   object-fit:cover;
-  border-radius:10px;
+  border-radius:16px;
 }
-.shoe-name{font-weight:600;margin:10px 0;}
-.shoe-price{font-weight:700;color:#764ba2;}
+.shoe-name{font-weight:600;margin:14px 0 8px;}
+.shoe-price{font-weight:700;color:#6b4fc6;}
 .questionnaire{max-width:600px;margin:0 auto;text-align:center;}
 .question{margin-bottom:25px;}
 
@@ -203,6 +283,18 @@ body{
   color:#555;
   margin-top:4px;
 }
+#sortPanel {
+  background: white;
+}
+#sortPanel .option {
+  color: black;
+}
+#sortPanel .option.selected {
+  background: white;
+  color: black !important;
+  border-color: #e0e0e0;
+  font-weight: bold;
+}
 </style>
 </head>
 <body>
@@ -210,34 +302,34 @@ body{
 <div class="container">
  
 <div class="header">
-<h1>SoleMate</h1>
-<p>Find the perfect shoes for your feet</p>
+  <a href="index.html" class="home-link">
+    <h1 class="header-title">SoleMate</h1>
+    <p class="header-subtitle">Find the perfect shoes for your feet</p>
+  </a>
+  <div class="top-controls">
+    <div class="left-buttons">
+      <button class="btn filter-toggle" onclick="toggleFilters()">Filter</button>
+      <div style="position:relative;">
+        <button class="btn sort-btn" onclick="toggleSort()">Sort by</button>
+        <div id="sortPanel" class="filter-panel" style="position:absolute;top:100%;left:0;display:none;min-width:160px;z-index:1000;">
+          <div class="option" onclick="setSort('alpha-asc')">Alphabetical A→Z</div>
+          <div class="option" onclick="setSort('alpha-desc')">Alphabetical Z→A</div>
+          <div class="option" onclick="setSort('price-asc')">Price Low→High</div>
+          <div class="option" onclick="setSort('price-desc')">Price High→Low</div>
+        </div>
+      </div>
+    </div>
+    <input type="text" id="shoeSearch" class="search-input" placeholder="Search shoes..." oninput="displayShoes()">
+    <div class="right-buttons">
+      <a href="questionnaire.html" class="btn">Personalize Shoes</a>
+    </div>
+  </div>
+   <a href="login.html" class="btn">Login</a>
 </div>
  
 <div class="content">
  
 <div id="catalogScreen" class="screen active">
- 
-  <!-- Top Controls: Filter button, Search bar, Questionnaire button -->
-  <div class="top-controls">
-  <button class="btn filter-toggle" onclick="toggleFilters()">Filter</button>
- 
-  <div style="position:relative;">
-    <button class="btn" onclick="toggleSort()">Sort by</button>
-    <div id="sortPanel" class="filter-panel" style="position:absolute;top:45px;left:0;display:none;min-width:160px;z-index:10;">
-      <div class="option" onclick="setSort('alpha-asc')">Alphabetical A→Z</div>
-      <div class="option" onclick="setSort('alpha-desc')">Alphabetical Z→A</div>
-      <div class="option" onclick="setSort('price-asc')">Price Low→High</div>
-      <div class="option" onclick="setSort('price-desc')">Price High→Low</div>
-    </div>
-  </div>
- 
-  <input type="text" id="shoeSearch" placeholder="Search shoes..." 
-         oninput="displayShoes()" 
-         style="flex:1; min-width:200px; max-width:400px; height:40px; padding:0 12px; border-radius:6px; border:1px solid #ccc;">
- 
-  <button class="btn" onclick="goToQuestionnaire()">Personalize Shoes</button>
-</div>
  
   <!-- Filter Panel -->
   <div id="filterPanel" class="filter-panel">
@@ -301,66 +393,7 @@ body{
  
 </div>
  
-<div id="questionnaireScreen" class="screen">
-<div class="questionnaire">
-<h2>Find Your Perfect Fit</h2>
- 
-<div class="question">
-<h3>Activity</h3>
-<div class="options" id="qPurpose">
-  <div class="option" onclick="selectQ('purpose','running',this)">Running</div>
-  <div class="option" onclick="selectQ('purpose','casual',this)">Casual</div>
-  <div class="option" onclick="selectQ('purpose','hiking',this)">Hiking</div>
-  <div class="option" onclick="selectQ('purpose','sports',this)">Sports</div>
-</div>
-</div>
- 
-<div class="question">
-<h3>Width</h3>
-<div class="options" id="qWidth">
-<div class="option" onclick="selectQ('width','narrow',this)">Narrow</div>
-<div class="option" onclick="selectQ('width','medium',this)">Medium</div>
-<div class="option" onclick="selectQ('width','wide',this)">Wide</div>
-<div class="option" onclick="selectQ('width','extra-wide',this)">Extra Wide</div>
-</div>
-</div>
- 
-<div class="question">
-<h3>Gender</h3>
-<div class="options" id="qGender">
-<div class="option" onclick="selectQ('gender','men',this)">Men</div>
-<div class="option" onclick="selectQ('gender','women',this)">Women</div>
-</div>
-</div>
- 
-<div class="question">
-  <h3>Shoe Size <span style="font-size:0.75em;font-weight:400;color:#888;">(optional)</span></h3>
-  <div class="q-size-wrapper">
-    <div class="q-size-row">
-      <input
-        type="number"
-        class="q-size-input"
-        id="qSizeInput"
-        placeholder="e.g. 10"
-        min="4" max="18" step="0.5"
-        oninput="onQSizeChange()"
-      >
-      <div class="q-unit-toggle">
-        <button id="qUnitUS" class="active" onclick="setQUnit('US')">US</button>
-        <button id="qUnitEU" onclick="setQUnit('EU')">EU</button>
-        <button id="qUnitUK" onclick="setQUnit('UK')">UK</button>
-      </div>
-    </div>
-    <div id="qSizeConversion" class="size-badge" style="display:none;"></div>
-    <div class="size-hint">Enter your size to filter shoes that carry your size. Leave blank to see all.</div>
-  </div>
-</div>
- 
-<div class="btn-container">
-<button class="btn" id="submitQ" onclick="submitQuestionnaire()" disabled>Show Recommendations</button>
-</div>
-</div>
-</div>
+
  
 </div>
 </div>
@@ -373,6 +406,27 @@ let showUserPref = false;
 let currentSort = 'alpha-asc';
  
 document.addEventListener('DOMContentLoaded', loadShoes);
+
+if(localStorage.getItem('userPref')){
+    userPref = JSON.parse(localStorage.getItem('userPref'));
+    showUserPref = true;
+    showRecommendation();
+    localStorage.removeItem('userPref');
+    // Set filters to match userPref
+    filter.width = userPref.width;
+    filter.activity = userPref.purpose;
+    filter.gender = userPref.gender;
+    filter.size = userPref.size;
+    filter.sizeUnit = userPref.sizeUnit;
+    // Update UI
+    document.getElementById('widthFilter').value = userPref.width;
+    document.getElementById('activityFilter').value = userPref.purpose;
+    document.getElementById('genderFilter').value = userPref.gender;
+    if(userPref.size){
+        document.getElementById('filterSizeInput').value = userPref.size;
+    }
+    setFilterUnit(userPref.sizeUnit);
+}
  
 async function loadShoes(){
     try{
@@ -409,44 +463,6 @@ function clearFilterSize(){
     displayShoes();
 }
  
-function goToQuestionnaire(){
-    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-    document.getElementById('questionnaireScreen').classList.add('active');
-}
- 
-function selectQ(type, value, el){
-    const capType = type.charAt(0).toUpperCase() + type.slice(1);
-    document.querySelectorAll(`#q${capType} .option`).forEach(o => o.classList.remove('selected'));
-    el.classList.add('selected');
-    userPref[type] = value;
-    updateSubmitBtn(); // NEW: was inline, now a function
-}
- 
-function onQSizeChange(){
-    const val = document.getElementById('qSizeInput').value;
-    userPref.size = val !== '' ? val : null;
-    const badge = document.getElementById('qSizeConversion');
-    if(val !== ''){
-        badge.textContent = conversionLabel(val, userPref.sizeUnit);
-        badge.style.display = 'inline-block';
-    } else {
-        badge.style.display = 'none';
-    }
-    updateSubmitBtn();
-}
- 
-function setQUnit(unit){
-    userPref.sizeUnit = unit;
-    ['US','EU','UK'].forEach(u => {
-        document.getElementById('qUnit' + u).classList.toggle('active', u === unit);
-    });
-    onQSizeChange();
-}
- 
-function updateSubmitBtn(){
-    // Size is optional — only purpose, width, gender are required
-    document.getElementById('submitQ').disabled = !(userPref.purpose && userPref.width && userPref.gender);
-}
  
 function usToEu(us){ return Math.round((parseFloat(us) + 31.5) * 2) / 2; }
 function euToUs(eu){ return Math.round((parseFloat(eu) - 31.5) * 2) / 2; }
@@ -471,13 +487,6 @@ function conversionLabel(value, unit){
     return '';
 }
  
-function submitQuestionnaire(){
-    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-    document.getElementById('catalogScreen').classList.add('active');
-    showUserPref = true; // show only personalized shoes
-    showRecommendation();
-    displayShoes();
-}
  
 function showRecommendation(){
     const purposeText={running:'running',casual:'casual',hiking:'hiking',sports:'sports'};
@@ -553,7 +562,7 @@ function displayShoes(){
         card.className = 'shoe-card';
         card.innerHTML = `
           <div class="shoe-image" style="position:relative;">
-            <a href="shoe-detail.html?shoe=${encodeURIComponent(s.name)}" target="_blank">
+            <a href="shoe-detail.html?shoe=${encodeURIComponent(s.name)}">
               <img src="${s.image}" alt="${s.name}" onerror="this.src=''">
             </a>
             ${s.gender == 'men' ? `<div style="position:absolute;top:8px;right:8px;background:rgba(59,130,246,0.85);color:white;font-size:12px;font-weight:600;padding:3px 8px;border-radius:20px;">♂ Men</div>` : `<div style="position:absolute;top:8px;right:8px;background:rgba(255,20,147,0.4);color:white;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;">♀ Women</div>`}
@@ -570,4 +579,3 @@ function displayShoes(){
 </script>
 </body>
 </html>
- 

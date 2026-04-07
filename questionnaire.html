@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoleMate - Personalize Your Shoes</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:linear-gradient(145deg,#e9eff7 0%,#f6f7fb 55%,#fcf9f3 100%);
+  min-height:100vh;
+  margin:0;
+  padding:0;
+  color:#1f2937;
+}
+.container{
+  background:rgba(255,255,255,0.96);
+  border-radius:0;
+  box-shadow:none;
+  width:100%;
+  min-height:100vh;
+}
+.questionnaire{max-width:600px;margin:0 auto;text-align:center;padding:40px 20px;}
+.question{margin-bottom:25px;}
+.options{display:grid;gap:10px;}
+.option{
+  padding:10px 15px;
+  border:2px solid #e0e0e0;
+  border-radius:8px;
+  cursor:pointer;
+  background:white;
+}
+.option.selected{
+  background:#667eea;
+  color:white;
+  border-color:#667eea;
+}
+.btn{
+  padding:12px 26px;
+  text-decoration: none;
+  background:linear-gradient(135deg,#5f7dff 0%,#6b4fc6 100%);
+  color:white;
+  border:none;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
+  margin:5px;
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 12px 24px rgba(102,126,234,0.18);
+  transition:transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 18px 32px rgba(102,126,234,0.24);opacity:0.98;}
+.btn:disabled{
+  opacity:0.5;
+  cursor:not-allowed;
+  transform:none;
+  box-shadow:0 8px 16px rgba(102,126,234,0.12);
+}
+.size-input-group{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:8px;
+  flex-wrap:wrap;
+}
+.q-size-wrapper{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+}
+.q-size-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.q-size-input{
+  width:100px;
+  height:44px;
+  padding:0 12px;
+  border:2px solid #e0e0e0;
+  border-radius:8px;
+  font-size:1.1em;
+  text-align:center;
+  outline:none;
+  transition:border-color 0.2s;
+}
+.q-size-input:focus{border-color:#667eea;}
+.q-unit-toggle{
+  display:flex;
+  border:2px solid #e0e0e0;
+  border-radius:8px;
+  overflow:hidden;
+}
+.q-unit-toggle button{
+  padding:8px 16px;
+  border:none;
+  background:white;
+  cursor:pointer;
+  font-size:0.9em;
+  font-weight:600;
+  color:#666;
+  transition:background 0.2s,color 0.2s;
+}
+.q-unit-toggle button.active{
+  background:#667eea;
+  color:white;
+}
+.size-badge{
+  display:inline-block;
+  background:#f0f0f0;
+  border-radius:6px;
+  padding:3px 10px;
+  font-size:0.82em;
+  color:#555;
+  margin-top:4px;
+}
+.size-hint{
+  font-size:0.78em;
+  color:#888;
+  margin-top:4px;
+}
+.btn-container{
+  margin-top:30px;
+}
+.header{
+  background:#1f2937;
+  color:white;
+  padding:20px 60px 18px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:nowrap;
+}
+.home-link{
+  display:inline-flex;
+  flex-direction:column;
+  text-decoration:none;
+  color:inherit;
+  background:transparent;
+  border:none;
+  padding:0;
+  cursor:pointer;
+}
+.home-link:hover .header-title,
+.home-link:focus .header-title{
+  opacity:0.94;
+}
+.home-link:hover .header-subtitle,
+.home-link:focus .header-subtitle{
+  opacity:0.88;
+}
+.header h1{font-size:3rem;margin-bottom:2px;}
+.header p{color:#cbd5e1;margin-top:2px;font-size:1rem;}
+.content{padding:40px 60px 80px;max-width:1200px;margin:0 auto;}
+.btn-secondary{
+  background:rgba(255,255,255,0.16);
+  color:white;
+  border:1px solid rgba(255,255,255,0.18);
+  box-shadow:none;
+}
+.btn-secondary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 18px 32px rgba(255,255,255,0.14);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="header">
+  <a href="index.html" class="home-link">
+    <h1 class="header-title">SoleMate</h1>
+    <p class="header-subtitle">Find the perfect shoes for your feet</p>
+  </a>
+  <a href="login.html" class="btn">Login</a>
+</div>
+<div class="content">
+<div class="questionnaire">
+<h2>Find Your Perfect Fit</h2>
+
+<div class="question">
+<h3>Activity</h3>
+<div class="options" id="qPurpose">
+  <div class="option" onclick="selectQ('purpose','running',this)">Running</div>
+  <div class="option" onclick="selectQ('purpose','casual',this)">Casual</div>
+  <div class="option" onclick="selectQ('purpose','hiking',this)">Hiking</div>
+  <div class="option" onclick="selectQ('purpose','sports',this)">Sports</div>
+</div>
+</div>
+
+<div class="question">
+<h3>Width</h3>
+<div class="options" id="qWidth">
+<div class="option" onclick="selectQ('width','narrow',this)">Narrow</div>
+<div class="option" onclick="selectQ('width','medium',this)">Medium</div>
+<div class="option" onclick="selectQ('width','wide',this)">Wide</div>
+<div class="option" onclick="selectQ('width','extra-wide',this)">Extra Wide</div>
+</div>
+</div>
+
+<div class="question">
+<h3>Gender</h3>
+<div class="options" id="qGender">
+<div class="option" onclick="selectQ('gender','men',this)">Men</div>
+<div class="option" onclick="selectQ('gender','women',this)">Women</div>
+</div>
+</div>
+
+<div class="question">
+  <h3>Shoe Size <span style="font-size:0.75em;font-weight:400;color:#888;">(optional)</span></h3>
+  <div class="q-size-wrapper">
+    <div class="q-size-row">
+      <input
+        type="number"
+        class="q-size-input"
+        id="qSizeInput"
+        placeholder="e.g. 10"
+        min="4" max="18" step="0.5"
+        oninput="onQSizeChange()"
+      >
+      <div class="q-unit-toggle">
+        <button id="qUnitUS" class="active" onclick="setQUnit('US')">US</button>
+        <button id="qUnitEU" onclick="setQUnit('EU')">EU</button>
+        <button id="qUnitUK" onclick="setQUnit('UK')">UK</button>
+      </div>
+    </div>
+    <div id="qSizeConversion" class="size-badge" style="display:none;"></div>
+    <div class="size-hint">Enter your size to filter shoes that carry your size. Leave blank to see all.</div>
+  </div>
+</div>
+
+<div class="btn-container">
+<button class="btn" id="submitQ" onclick="submitQuestionnaire()" disabled>Show Recommendations</button>
+</div>
+</div>
+</div>
+
+<script>
+let userPref = { purpose:null, width:null, gender:null, size:null, sizeUnit:'US' };
+
+function selectQ(type, value, el){
+    const capType = type.charAt(0).toUpperCase() + type.slice(1);
+    if (el.classList.contains('selected')) {
+        el.classList.remove('selected');
+        userPref[type] = null;
+    } else {
+        document.querySelectorAll(`#q${capType} .option`).forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+        userPref[type] = value;
+    }
+    updateSubmitBtn();
+}
+
+function onQSizeChange(){
+    const val = document.getElementById('qSizeInput').value;
+    userPref.size = val !== '' ? val : null;
+    const badge = document.getElementById('qSizeConversion');
+    if(val !== ''){
+        badge.textContent = conversionLabel(val, userPref.sizeUnit);
+        badge.style.display = 'inline-block';
+    } else {
+        badge.style.display = 'none';
+    }
+    updateSubmitBtn();
+}
+
+function setQUnit(unit){
+    userPref.sizeUnit = unit;
+    ['US','EU','UK'].forEach(u => {
+        document.getElementById('qUnit' + u).classList.toggle('active', u === unit);
+    });
+    onQSizeChange();
+}
+
+function updateSubmitBtn(){
+    document.getElementById('submitQ').disabled = !(userPref.purpose && userPref.width && userPref.gender);
+}
+
+function usToEu(us){ return Math.round((parseFloat(us) + 31.5) * 2) / 2; }
+function euToUs(eu){ return Math.round((parseFloat(eu) - 31.5) * 2) / 2; }
+function usToUk(us){ return Math.round((parseFloat(us) - 1) * 2) / 2; }
+function ukToUs(uk){ return Math.round((parseFloat(uk) + 1) * 2) / 2; }
+
+function conversionLabel(value, unit){
+    const v = parseFloat(value);
+    if(isNaN(v)) return '';
+    if(unit === 'US') return `EU ${usToEu(v)} · UK ${usToUk(v)}`;
+    if(unit === 'EU') return `US ${euToUs(v)} · UK ${usToUk(euToUs(v))}`;
+    if(unit === 'UK') return `US ${ukToUs(v)} · EU ${usToEu(ukToUs(v))}`;
+    return '';
+}
+
+function submitQuestionnaire(){
+    localStorage.setItem('userPref', JSON.stringify(userPref));
+    window.location.href = 'index.html';
+}
+</script>
+</body>
+</html>

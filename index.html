@@ -43,13 +43,9 @@ body{
   cursor:pointer;
 }
 .home-link:hover .header-title,
-.home-link:focus .header-title{
-  opacity:0.94;
-}
+.home-link:focus .header-title{opacity:0.94;}
 .home-link:hover .header-subtitle,
-.home-link:focus .header-subtitle{
-  opacity:0.88;
-}
+.home-link:focus .header-subtitle{opacity:0.88;}
 .header h1{font-size:3rem;margin-bottom:2px;}
 .header p{color:#cbd5e1;margin-top:2px;font-size:1rem;}
 .content{padding:40px 60px 80px;max-width:1200px;margin:0 auto;}
@@ -113,9 +109,7 @@ body{
   border-color:#5f7dff;
   box-shadow:0 0 0 4px rgba(95,125,255,0.12);
 }
-.filter-toggle{
-  margin-top:4px;
-}
+.filter-toggle{margin-top:4px;}
 .filter-panel{
   display:none;
   background:#f8f9ff;
@@ -185,16 +179,6 @@ body{
 }
 .shoe-name{font-weight:600;margin:14px 0 8px;}
 .shoe-price{font-weight:700;color:#6b4fc6;}
-.questionnaire{max-width:600px;margin:0 auto;text-align:center;}
-.question{margin-bottom:25px;}
-
-.size-input-group{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top:8px;
-  flex-wrap:wrap;
-}
 .size-number-input{
   width:90px;
   height:36px;
@@ -231,57 +215,12 @@ body{
   color:#888;
   margin-top:4px;
 }
-.q-size-wrapper{
+.size-input-group{
   display:flex;
-  flex-direction:column;
   align-items:center;
   gap:10px;
-}
-.q-size-row{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.q-size-input{
-  width:100px;
-  height:44px;
-  padding:0 12px;
-  border:2px solid #e0e0e0;
-  border-radius:8px;
-  font-size:1.1em;
-  text-align:center;
-  outline:none;
-  transition:border-color 0.2s;
-}
-.q-size-input:focus{border-color:#667eea;}
-.q-unit-toggle{
-  display:flex;
-  border:2px solid #e0e0e0;
-  border-radius:8px;
-  overflow:hidden;
-}
-.q-unit-toggle button{
-  padding:8px 16px;
-  border:none;
-  background:white;
-  cursor:pointer;
-  font-size:0.9em;
-  font-weight:600;
-  color:#666;
-  transition:background 0.2s,color 0.2s;
-}
-.q-unit-toggle button.active{
-  background:#667eea;
-  color:white;
-}
-.size-badge{
-  display:inline-block;
-  background:#f0f0f0;
-  border-radius:6px;
-  padding:3px 10px;
-  font-size:0.82em;
-  color:#555;
-  margin-top:4px;
+  margin-top:8px;
+  flex-wrap:wrap;
 }
 #sortPanel {
   background: white;
@@ -324,7 +263,7 @@ body{
       <a href="questionnaire.html" class="btn">Personalize Shoes</a>
     </div>
   </div>
-   <a href="login.html" class="btn">Login</a>
+  <a href="login.html" class="btn">Login</a>
 </div>
  
 <div class="content">
@@ -364,7 +303,6 @@ body{
       </select>
     </label>
  
-    <!-- NEW -->
     <div style="margin-top:14px;">
       <label style="font-weight:500;color:#444;font-size:0.95em;display:block;margin-bottom:6px;">Shoe Size:</label>
       <div class="size-input-group">
@@ -388,196 +326,205 @@ body{
   </div>
  
   <div id="recommendationBox" style="margin-bottom:20px;"></div>
- 
   <div class="shoes-grid" id="shoesGrid"></div>
  
 </div>
- 
-
- 
 </div>
 </div>
  
 <script>
-let shoes = [];
-let userPref = { purpose:null, width:null, gender:null, size:null, sizeUnit:'US' }; // NEW: size, sizeUnit
-let filter = { width:'all', activity:'all', gender:'all', size:null, sizeUnit:'US' }; // NEW: size, sizeUnit
+// ── EMBEDDED SHOE DATA (no fetch needed) ──────────────────────────────────────
+const SHOES_DATA = [
+  {"name":"Nike Air Force 1 '07","category":"casual","width":"medium","gender":"men","price":115,"sizes":[7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12,13],"link":"https://www.nike.com/t/air-force-1-07-mens-shoes-jBrhbr/CW2288-111","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+FORCE+1+%2707.png"},
+  {"name":"Nike Court Vision Low","category":"casual","width":"medium","gender":"men","price":85,"sizes":[7,7.5,8,8.5,9,9.5,10,10.5,11,12],"link":"https://www.nike.com/t/court-vision-low-mens-shoes-FpEqIQ3A/HV2530-100","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/30196c19-7f0f-4566-bb63-94e3a3051b61/NIKE+COURT+VISION+LO.png"},
+  {"name":"Nike Killshot 2 Leather","category":"casual","width":"narrow","gender":"men","price":100,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/killshot-2-leather-mens-shoes-72M7D1/IQ9402-133","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/7a7d9dd5-851e-4401-a924-a287be7c6ab9/KILLSHOT+2+LEATHER.png"},
+  {"name":"Nike Air Max 90","category":"casual","width":"medium","gender":"men","price":135,"sizes":[7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12,13],"link":"https://www.nike.com/t/air-max-90-mens-shoes-bAZ6AeHT/DM0029-600","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/0cb8b8c5-aa97-4d3e-accc-82cbe810ec10/AIR+MAX+90.png"},
+  {"name":"Nike Revolution 8","category":"casual","width":"medium","gender":"men","price":75,"sizes":[7,8,9,10,11,12,13],"link":"https://www.nike.com/t/revolution-8-mens-road-running-shoes-U0b8oy8S/HJ9198-006","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/11a579e0-aec8-4398-88b0-a85808bd221d/NIKE+REVOLUTION+8.png"},
+  {"name":"Nike Pegasus 41","category":"running","width":"medium","gender":"men","price":117,"sizes":[7,7.5,8,8.5,9,9.5,10,10.5,11,12,13],"link":"https://www.nike.com/t/pegasus-41-mens-road-running-shoes-LMhfRGdO/IM6674-101","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/b26e2224-80ee-4cf1-a9d5-85e18af58e2c/AIR+ZOOM+PEGASUS+41.png"},
+  {"name":"Nike Vomero 18","category":"running","width":"narrow","gender":"men","price":165,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/vomero-18-mens-realtree-road-running-shoes-NzWnvcC8/IF4456-001","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/0bfaf4c8-a1a8-481d-bb08-bacd2290be64/NIKE+VOMERO+18+CM.png"},
+  {"name":"Nike Structure 26","category":"running","width":"narrow","gender":"men","price":145,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/structure-26-mens-road-running-shoes-M4sx9fru/HJ1102-102","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/cb81dc56-fc1e-4e3a-83ac-c4476dace3b8/NIKE+STRUCTURE+26.png"},
+  {"name":"Nike Journey Run","category":"running","width":"narrow","gender":"men","price":95,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/journey-run-mens-road-running-shoes-Qg3sJk/FN0228-302","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/7baa1200-f1d2-4b74-8ac6-0df00e565c89/NIKE+JOURNEY+RUN.png"},
+  {"name":"Nike Winflo 11","category":"running","width":"narrow","gender":"men","price":78,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/wio-11-womens-road-running-shoes-slS3PS/FJ9510-001","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/e34ff366-8339-4efa-a30e-f590467ed6b0/WMNS+NIKE+AIR+WINFLO+11.png"},
+  {"name":"Nike Wildhorse 10","category":"hiking","width":"narrow","gender":"men","price":165,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/wildhorse-10-mens-trail-running-shoes-juOQGIPO/FV2338-009","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d74a514b-224b-466b-a2b6-3c93aea86998/NIKE+REACTX+WILDHORSE+10.png"},
+  {"name":"Nike Pegasus Trail 5","category":"hiking","width":"medium","gender":"men","price":155,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/pegasus-trail-5-mens-trail-running-shoes-0ZrZ4D/DV3864-403","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/8ca933c9-a29a-4a52-bc06-b2ae4ce66e71/NIKE+REACTX+PEGASUS+TRAIL+5.png"},
+  {"name":"Nike ACG Ultrafly Trail","category":"hiking","width":"medium","gender":"men","price":260,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/acg-ultrafly-trail-trail-racing-shoes-uNHxL3GA/HF5668-801","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d7402d3a-aabc-4d02-a4d8-8bdba0ba60a0/NIKE+ACG+ULTRAFLY+TRAIL.png"},
+  {"name":"Nike Pegasus Trail 5 GORE-TEX","category":"hiking","width":"medium","gender":"men","price":180,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/pegasus-trail-5-gore-tex-mens-waterproof-trail-running-shoes-Tqyf11TS/FQ0908-001","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/daf0e3a9-bfaf-41c7-acd0-d28bbaf7316f/NIKE+PEGASUS+TRAIL+5+GTX.png"},
+  {"name":"Nike Zegama 2","category":"hiking","width":"narrow","gender":"men","price":153,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/zegama-2-mens-trail-running-shoes-xeTRbJ5L/FD5190-001","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/189db369-1294-4c35-bd60-7d663a74b1cc/NIKE+ZOOMX+ZEGAMA+TRAIL+2.png"},
+  {"name":"Nike Mercurial Vapor 16 Elite","category":"sports","width":"medium","gender":"men","price":270,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/mercurial-vapor-16-elite-firm-ground-low-top-soccer-cleats-aF5hbEJb/FQ1457-001","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/4360ee05-0d4d-4cc7-acf3-9194c9745773/ZM+VAPOR+16+ELITE+FG.png"},
+  {"name":"Nike Phantom 6 Low Elite 'Erling Haaland'","category":"sports","width":"wide","gender":"men","price":190,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/phantom-6-low-elite-erling-haaland-firm-ground-soccer-cleats-XmHqLlVc/HQ2332-800","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/0079ed1c-a095-4aff-92ba-9f1bd557ce3e/PHANTOM+6+LOW+ELITE+FG+EH.png"},
+  {"name":"Nike Alpha Huarache Elite 4 Mid","category":"sports","width":"medium","gender":"men","price":90,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/alpha-huarache-elite-4-mid-mens-baseball-cleats-JDPv50/FD2744-106","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/e8ecc5c3-ea1c-4501-9671-efef0c929061/ALPHA+HUARACHE+ELITE+4+MID.png"},
+  {"name":"Nike Vapor Edge 360 'Untouchable'","category":"sports","width":"medium","gender":"men","price":190,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/vapor-edge-360-untouchable-mens-football-cleats-kIP8magY/FQ0235-102","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/69663b43-0df1-4443-a39d-be7de42a2663/NIKE+VAPOR+EDGE+360+UT.png"},
+  {"name":"Nike Diamond Turf 2","category":"sports","width":"medium","gender":"men","price":210,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/diamond-turf-2-football-cleats-HJIyz7lk/IF4807-001","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/fd94150e-8fca-4afe-a011-f6b66585cfaa/DIAMOND+TURF+II+TD.png"},
+  {"name":"Nike Vomero Plus","category":"sports","width":"medium","gender":"women","price":180,"sizes":[5,5.5,6,6.5,7,7.5,8,8.5,9,10],"link":"https://www.nike.com/t/vomero-plus-womens-road-running-shoes-8AH6updi/HV8154-503","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ce8724a0-241e-4f47-b3d1-6a2f2ad6d7c2/W+NIKE+VOMERO+PLUS.png"}
+];
+
+let shoes = SHOES_DATA; // use embedded data directly
+let userPref = { purpose:null, width:null, gender:null, size:null, sizeUnit:'US' };
+let filter = { width:'all', activity:'all', gender:'all', size:null, sizeUnit:'US' };
 let showUserPref = false;
 let currentSort = 'alpha-asc';
- 
-document.addEventListener('DOMContentLoaded', loadShoes);
 
-if(localStorage.getItem('userPref')){
-    userPref = JSON.parse(localStorage.getItem('userPref'));
-    showUserPref = true;
+// Check for userPref from questionnaire BEFORE displayShoes
+const savedPref = localStorage.getItem('userPref');
+if(savedPref){
+  userPref = JSON.parse(savedPref);
+  showUserPref = true;
+  localStorage.removeItem('userPref');
+
+  filter.width    = userPref.width;
+  filter.activity = userPref.purpose;
+  filter.gender   = userPref.gender;
+  filter.size     = userPref.size;
+  filter.sizeUnit = userPref.sizeUnit;
+
+  // Update filter UI elements (they exist when this runs since it's deferred to DOMContentLoaded below)
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if(savedPref){
+    document.getElementById('widthFilter').value    = userPref.width    || 'all';
+    document.getElementById('activityFilter').value = userPref.purpose  || 'all';
+    document.getElementById('genderFilter').value   = userPref.gender   || 'all';
+    if(userPref.size) document.getElementById('filterSizeInput').value = userPref.size;
+    setFilterUnit(userPref.sizeUnit || 'US');
     showRecommendation();
-    localStorage.removeItem('userPref');
-    // Set filters to match userPref
-    filter.width = userPref.width;
-    filter.activity = userPref.purpose;
-    filter.gender = userPref.gender;
-    filter.size = userPref.size;
-    filter.sizeUnit = userPref.sizeUnit;
-    // Update UI
-    document.getElementById('widthFilter').value = userPref.width;
-    document.getElementById('activityFilter').value = userPref.purpose;
-    document.getElementById('genderFilter').value = userPref.gender;
-    if(userPref.size){
-        document.getElementById('filterSizeInput').value = userPref.size;
-    }
-    setFilterUnit(userPref.sizeUnit);
-}
- 
-async function loadShoes(){
-    try{
-        const res = await fetch('nike-shoes.json');
-        shoes = await res.json();
-        displayShoes();
-    }catch(e){console.error(e);}
-}
- 
+  }
+  displayShoes();
+});
+
 function toggleFilters(){
-    document.getElementById('filterPanel').classList.toggle('show');
+  document.getElementById('filterPanel').classList.toggle('show');
 }
- 
+
 function setFilter(type, value){
-    filter[type] = value;
-    showUserPref = false; // This for unpersonalized shoes
-    displayShoes();
+  filter[type] = value;
+  showUserPref = false;
+  displayShoes();
 }
- 
-// NEW
+
 function setFilterUnit(unit){
-    filter.sizeUnit = unit;
-    ['US','EU','UK'].forEach(u => {
-        document.getElementById('filterUnit' + u).classList.toggle('active', u === unit);
-    });
-    const val = document.getElementById('filterSizeInput').value;
-    filter.size = val !== '' ? val : null;
-    displayShoes();
+  filter.sizeUnit = unit;
+  ['US','EU','UK'].forEach(u => {
+    document.getElementById('filterUnit' + u).classList.toggle('active', u === unit);
+  });
+  const val = document.getElementById('filterSizeInput').value;
+  filter.size = val !== '' ? val : null;
+  displayShoes();
 }
- 
+
 function clearFilterSize(){
-    document.getElementById('filterSizeInput').value = '';
-    filter.size = null;
-    displayShoes();
+  document.getElementById('filterSizeInput').value = '';
+  filter.size = null;
+  displayShoes();
 }
- 
- 
+
 function usToEu(us){ return Math.round((parseFloat(us) + 31.5) * 2) / 2; }
 function euToUs(eu){ return Math.round((parseFloat(eu) - 31.5) * 2) / 2; }
 function usToUk(us){ return Math.round((parseFloat(us) - 1) * 2) / 2; }
 function ukToUs(uk){ return Math.round((parseFloat(uk) + 1) * 2) / 2; }
- 
+
 function toUSSize(value, unit){
-    const v = parseFloat(value);
-    if(isNaN(v)) return null;
-    if(unit === 'US') return v;
-    if(unit === 'EU') return euToUs(v);
-    if(unit === 'UK') return ukToUs(v);
-    return v;
+  const v = parseFloat(value);
+  if(isNaN(v)) return null;
+  if(unit === 'US') return v;
+  if(unit === 'EU') return euToUs(v);
+  if(unit === 'UK') return ukToUs(v);
+  return v;
 }
- 
+
 function conversionLabel(value, unit){
-    const v = parseFloat(value);
-    if(isNaN(v)) return '';
-    if(unit === 'US') return `EU ${usToEu(v)} · UK ${usToUk(v)}`;
-    if(unit === 'EU') return `US ${euToUs(v)} · UK ${usToUk(euToUs(v))}`;
-    if(unit === 'UK') return `US ${ukToUs(v)} · EU ${usToEu(ukToUs(v))}`;
-    return '';
+  const v = parseFloat(value);
+  if(isNaN(v)) return '';
+  if(unit === 'US') return `EU ${usToEu(v)} · UK ${usToUk(v)}`;
+  if(unit === 'EU') return `US ${euToUs(v)} · UK ${usToUk(euToUs(v))}`;
+  if(unit === 'UK') return `US ${ukToUs(v)} · EU ${usToEu(ukToUs(v))}`;
+  return '';
 }
- 
- 
+
 function showRecommendation(){
-    const purposeText={running:'running',casual:'casual',hiking:'hiking',sports:'sports'};
-    const widthText={narrow:'narrow',medium:'medium',wide:'wide','extra-wide':'extra-wide'};
-    const sizeText = userPref.size ? `, size <strong>${userPref.size} ${userPref.sizeUnit}</strong>` : ''; // NEW
-    document.getElementById('recommendationBox').innerHTML =
-        `<p>Based on your choices: <strong>${purposeText[userPref.purpose]}</strong> for <strong>${widthText[userPref.width]}</strong> (${userPref.gender}${sizeText}), here are your best options:</p>`;
+  const sizeText = userPref.size ? `, size <strong>${userPref.size} ${userPref.sizeUnit}</strong>` : '';
+  document.getElementById('recommendationBox').innerHTML =
+    `<p>Based on your choices: <strong>${userPref.purpose}</strong> for <strong>${userPref.width}</strong> (${userPref.gender}${sizeText}), here are your best options:</p>`;
 }
- 
+
 function toggleSort(){
-    const panel = document.getElementById('sortPanel');
-    panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+  const panel = document.getElementById('sortPanel');
+  panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
 }
- 
+
 function setSort(sortType){
-    currentSort = sortType;
- 
-    document.querySelectorAll('#sortPanel .option').forEach(o => o.classList.remove('selected'));
-    document.querySelector(`#sortPanel .option[onclick="setSort('${sortType}')"]`).classList.add('selected');
- 
-    document.getElementById('sortPanel').style.display = 'none';
-    displayShoes();
+  currentSort = sortType;
+  document.querySelectorAll('#sortPanel .option').forEach(o => o.classList.remove('selected'));
+  document.querySelector(`#sortPanel .option[onclick="setSort('${sortType}')"]`).classList.add('selected');
+  document.getElementById('sortPanel').style.display = 'none';
+  displayShoes();
 }
- 
+
 function displayShoes(){
-    const grid = document.getElementById('shoesGrid');
-    const searchTerm = document.getElementById('shoeSearch').value.toLowerCase();
-    grid.innerHTML = '';
- 
-    // NEW: resolve size to US for comparison
-    const rawSize  = showUserPref ? userPref.size    : filter.size;
-    const sizeUnit = showUserPref ? userPref.sizeUnit : filter.sizeUnit;
-    const targetUS = toUSSize(rawSize, sizeUnit);
- 
-    let filtered = shoes.filter(s => {
-        const activeFilter = showUserPref ? userPref : filter;
- 
-        // NEW: size match
-        let sizeMatch = true;
-        if(targetUS !== null && Array.isArray(s.sizes) && s.sizes.length > 0){
-            sizeMatch = s.sizes.some(sz => Math.abs(parseFloat(sz) - targetUS) <= 0.5);
-        }
- 
-        return (
-            (activeFilter.width === 'all' || s.width === activeFilter.width) &&
-            (activeFilter.activity === 'all' || s.category === (activeFilter.purpose || activeFilter.activity)) &&
-            (activeFilter.gender === 'all' || s.gender === activeFilter.gender) &&
-            s.name.toLowerCase().includes(searchTerm) &&
-            sizeMatch // NEW
-        );
-    });
- 
-    filtered.sort((a,b) => {
-        if(currentSort === 'alpha-asc') return a.name.localeCompare(b.name);
-        if(currentSort === 'alpha-desc') return b.name.localeCompare(a.name);
-        if(currentSort === 'price-asc') return a.price - b.price;
-        if(currentSort === 'price-desc') return b.price - a.price;
-    });
- 
-    // NEW: empty state
-    if(filtered.length === 0){
-        grid.innerHTML = `<p style="color:#888;grid-column:1/-1;text-align:center;padding:40px 0;">No shoes match your criteria. Try adjusting your filters.</p>`;
-        return;
+  const grid = document.getElementById('shoesGrid');
+  const searchTerm = document.getElementById('shoeSearch').value.toLowerCase();
+  grid.innerHTML = '';
+
+  const rawSize  = showUserPref ? userPref.size    : filter.size;
+  const sizeUnit = showUserPref ? userPref.sizeUnit : filter.sizeUnit;
+  const targetUS = toUSSize(rawSize, sizeUnit);
+
+  let filtered = shoes.filter(s => {
+    const activeFilter = showUserPref ? userPref : filter;
+
+    let sizeMatch = true;
+    if(targetUS !== null && Array.isArray(s.sizes) && s.sizes.length > 0){
+      sizeMatch = s.sizes.some(sz => Math.abs(parseFloat(sz) - targetUS) <= 0.5);
     }
- 
-    filtered.forEach(s=>{
-        // NEW: sizes preview
-        const sizesDisplay = Array.isArray(s.sizes) && s.sizes.length
-            ? `<div style="margin-top:6px;font-size:0.78em;color:#666;">Sizes: ${s.sizes.slice(0,6).join(', ')}${s.sizes.length > 6 ? ' …' : ''}</div>`
-            : '';
- 
-        const card = document.createElement('div');
-        card.className = 'shoe-card';
-        card.innerHTML = `
-          <div class="shoe-image" style="position:relative;">
-            <a href="shoe-detail.html?shoe=${encodeURIComponent(s.name)}">
-              <img src="${s.image}" alt="${s.name}" onerror="this.src=''">
-            </a>
-            ${s.gender == 'men' ? `<div style="position:absolute;top:8px;right:8px;background:rgba(59,130,246,0.85);color:white;font-size:12px;font-weight:600;padding:3px 8px;border-radius:20px;">♂ Men</div>` : `<div style="position:absolute;top:8px;right:8px;background:rgba(255,20,147,0.4);color:white;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;">♀ Women</div>`}
-          </div>
-          <div class="shoe-name">${s.name}</div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
-            <div class="shoe-price">$${s.price}</div>
-          </div>
-          ${sizesDisplay}
-        `;
-        grid.appendChild(card);
-    });
+
+    return (
+      (activeFilter.width === 'all' || s.width === activeFilter.width) &&
+      (activeFilter.activity === 'all' || s.category === (activeFilter.purpose || activeFilter.activity)) &&
+      (activeFilter.gender === 'all' || s.gender === activeFilter.gender) &&
+      s.name.toLowerCase().includes(searchTerm) &&
+      sizeMatch
+    );
+  });
+
+  filtered.sort((a,b) => {
+    if(currentSort === 'alpha-asc')  return a.name.localeCompare(b.name);
+    if(currentSort === 'alpha-desc') return b.name.localeCompare(a.name);
+    if(currentSort === 'price-asc')  return a.price - b.price;
+    if(currentSort === 'price-desc') return b.price - a.price;
+    return 0;
+  });
+
+  if(filtered.length === 0){
+    grid.innerHTML = `<p style="color:#888;grid-column:1/-1;text-align:center;padding:40px 0;">No shoes match your criteria. Try adjusting your filters.</p>`;
+    return;
+  }
+
+  filtered.forEach(s => {
+    const sizesDisplay = Array.isArray(s.sizes) && s.sizes.length
+      ? `<div style="margin-top:6px;font-size:0.78em;color:#666;">Sizes: ${s.sizes.slice(0,6).join(', ')}${s.sizes.length > 6 ? ' …' : ''}</div>`
+      : '';
+
+    const card = document.createElement('div');
+    card.className = 'shoe-card';
+    card.innerHTML = `
+      <div class="shoe-image" style="position:relative;">
+        <a href="shoe-detail.html?shoe=${encodeURIComponent(s.name)}">
+          <img src="${s.image}" alt="${s.name}" onerror="this.src=''">
+        </a>
+        ${s.gender === 'men'
+          ? `<div style="position:absolute;top:8px;right:8px;background:rgba(59,130,246,0.85);color:white;font-size:12px;font-weight:600;padding:3px 8px;border-radius:20px;">♂ Men</div>`
+          : `<div style="position:absolute;top:8px;right:8px;background:rgba(255,20,147,0.4);color:white;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;">♀ Women</div>`
+        }
+      </div>
+      <div class="shoe-name">${s.name}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+        <div class="shoe-price">$${s.price}</div>
+      </div>
+      ${sizesDisplay}
+    `;
+    grid.appendChild(card);
+  });
 }
 </script>
 </body>
 </html>
-
-

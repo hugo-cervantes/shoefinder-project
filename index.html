@@ -333,7 +333,6 @@ body{
 </div>
  
 <script>
-// ── EMBEDDED SHOE DATA (no fetch needed) ──────────────────────────────────────
 const SHOES_DATA = [
   {"name":"Nike Air Force 1 '07","category":"casual","width":"medium","gender":"men","price":115,"sizes":[7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12,13],"link":"https://www.nike.com/t/air-force-1-07-mens-shoes-jBrhbr/CW2288-111","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+FORCE+1+%2707.png"},
   {"name":"Nike Court Vision Low","category":"casual","width":"medium","gender":"men","price":85,"sizes":[7,7.5,8,8.5,9,9.5,10,10.5,11,12],"link":"https://www.nike.com/t/court-vision-low-mens-shoes-FpEqIQ3A/HV2530-100","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/30196c19-7f0f-4566-bb63-94e3a3051b61/NIKE+COURT+VISION+LO.png"},
@@ -358,35 +357,43 @@ const SHOES_DATA = [
   {"name":"Nike Vomero Plus","category":"sports","width":"medium","gender":"women","price":180,"sizes":[5,5.5,6,6.5,7,7.5,8,8.5,9,10],"link":"https://www.nike.com/t/vomero-plus-womens-road-running-shoes-8AH6updi/HV8154-503","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ce8724a0-241e-4f47-b3d1-6a2f2ad6d7c2/W+NIKE+VOMERO+PLUS.png"}
 ];
 
-let shoes = SHOES_DATA; // use embedded data directly
-let userPref = { purpose:null, width:null, gender:null, size:null, sizeUnit:'US' };
+let shoes = SHOES_DATA;
+// ── FIX: filter always uses 'all' as default, never null ──────────────────────
 let filter = { width:'all', activity:'all', gender:'all', size:null, sizeUnit:'US' };
 let showUserPref = false;
+let userPref = {};
 let currentSort = 'alpha-asc';
 
-// Check for userPref from questionnaire BEFORE displayShoes
-const savedPref = localStorage.getItem('userPref');
-if(savedPref){
-  userPref = JSON.parse(savedPref);
-  showUserPref = true;
+// ── FIX: safely read and validate localStorage pref ───────────────────────────
+let savedPref = null;
+try {
+  const raw = localStorage.getItem('userPref');
+  if (raw) {
+    savedPref = JSON.parse(raw);
+    localStorage.removeItem('userPref');
+  }
+} catch(e) {
   localStorage.removeItem('userPref');
+}
 
-  filter.width    = userPref.width;
-  filter.activity = userPref.purpose;
-  filter.gender   = userPref.gender;
-  filter.size     = userPref.size;
-  filter.sizeUnit = userPref.sizeUnit;
-
-  // Update filter UI elements (they exist when this runs since it's deferred to DOMContentLoaded below)
+if (savedPref) {
+  userPref = savedPref;
+  showUserPref = true;
+  // ── FIX: guard against null values from questionnaire ─────────────────────
+  filter.width    = userPref.width    || 'all';
+  filter.activity = userPref.purpose  || 'all';   // questionnaire uses 'purpose', filter uses 'activity'
+  filter.gender   = userPref.gender   || 'all';
+  filter.size     = userPref.size     || null;
+  filter.sizeUnit = userPref.sizeUnit || 'US';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  if(savedPref){
-    document.getElementById('widthFilter').value    = userPref.width    || 'all';
-    document.getElementById('activityFilter').value = userPref.purpose  || 'all';
-    document.getElementById('genderFilter').value   = userPref.gender   || 'all';
-    if(userPref.size) document.getElementById('filterSizeInput').value = userPref.size;
-    setFilterUnit(userPref.sizeUnit || 'US');
+  if (savedPref) {
+    document.getElementById('widthFilter').value    = filter.width;
+    document.getElementById('activityFilter').value = filter.activity;
+    document.getElementById('genderFilter').value   = filter.gender;
+    if (filter.size) document.getElementById('filterSizeInput').value = filter.size;
+    setFilterUnit(filter.sizeUnit);
     showRecommendation();
   }
   displayShoes();
@@ -397,7 +404,7 @@ function toggleFilters(){
 }
 
 function setFilter(type, value){
-  filter[type] = value;
+  filter[type] = value || 'all';
   showUserPref = false;
   displayShoes();
 }
@@ -432,19 +439,10 @@ function toUSSize(value, unit){
   return v;
 }
 
-function conversionLabel(value, unit){
-  const v = parseFloat(value);
-  if(isNaN(v)) return '';
-  if(unit === 'US') return `EU ${usToEu(v)} · UK ${usToUk(v)}`;
-  if(unit === 'EU') return `US ${euToUs(v)} · UK ${usToUk(euToUs(v))}`;
-  if(unit === 'UK') return `US ${ukToUs(v)} · EU ${usToEu(ukToUs(v))}`;
-  return '';
-}
-
 function showRecommendation(){
-  const sizeText = userPref.size ? `, size <strong>${userPref.size} ${userPref.sizeUnit}</strong>` : '';
+  const sizeText = userPref.size ? `, size <strong>${userPref.size} ${userPref.sizeUnit || 'US'}</strong>` : '';
   document.getElementById('recommendationBox').innerHTML =
-    `<p>Based on your choices: <strong>${userPref.purpose}</strong> for <strong>${userPref.width}</strong> (${userPref.gender}${sizeText}), here are your best options:</p>`;
+    `<p>Based on your choices: <strong>${userPref.purpose || 'any activity'}</strong> for <strong>${userPref.width || 'any width'}</strong> (${userPref.gender || 'any gender'}${sizeText}), here are your best options:</p>`;
 }
 
 function toggleSort(){
@@ -462,28 +460,24 @@ function setSort(sortType){
 
 function displayShoes(){
   const grid = document.getElementById('shoesGrid');
-  const searchTerm = document.getElementById('shoeSearch').value.toLowerCase();
+  const searchTerm = document.getElementById('shoeSearch') ? document.getElementById('shoeSearch').value.toLowerCase() : '';
   grid.innerHTML = '';
 
-  const rawSize  = showUserPref ? userPref.size    : filter.size;
-  const sizeUnit = showUserPref ? userPref.sizeUnit : filter.sizeUnit;
-  const targetUS = toUSSize(rawSize, sizeUnit);
+  // ── FIX: always read from filter (single source of truth, already synced from userPref above) ──
+  const targetUS = toUSSize(filter.size, filter.sizeUnit);
 
   let filtered = shoes.filter(s => {
-    const activeFilter = showUserPref ? userPref : filter;
+    const widthOk    = filter.width    === 'all' || s.width    === filter.width;
+    const activityOk = filter.activity === 'all' || s.category === filter.activity;
+    const genderOk   = filter.gender   === 'all' || s.gender   === filter.gender;
+    const searchOk   = s.name.toLowerCase().includes(searchTerm);
 
-    let sizeMatch = true;
-    if(targetUS !== null && Array.isArray(s.sizes) && s.sizes.length > 0){
-      sizeMatch = s.sizes.some(sz => Math.abs(parseFloat(sz) - targetUS) <= 0.5);
+    let sizeOk = true;
+    if (targetUS !== null && Array.isArray(s.sizes) && s.sizes.length > 0) {
+      sizeOk = s.sizes.some(sz => Math.abs(parseFloat(sz) - targetUS) <= 0.5);
     }
 
-    return (
-      (activeFilter.width === 'all' || s.width === activeFilter.width) &&
-      (activeFilter.activity === 'all' || s.category === (activeFilter.purpose || activeFilter.activity)) &&
-      (activeFilter.gender === 'all' || s.gender === activeFilter.gender) &&
-      s.name.toLowerCase().includes(searchTerm) &&
-      sizeMatch
-    );
+    return widthOk && activityOk && genderOk && searchOk && sizeOk;
   });
 
   filtered.sort((a,b) => {

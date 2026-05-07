@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shoe Details</title> <!-- This doesn't matter because it will be changed -->
+<title>Shoe Details</title>
 <style>
 body {
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
@@ -13,7 +13,6 @@ body {
   padding: 0;
   color: #1f2937;
 }
-
 .header{
   background:#1f2937;
   color:white;
@@ -36,13 +35,9 @@ body {
   cursor:pointer;
 }
 .home-link:hover .header-title,
-.home-link:focus .header-title{
-  opacity:0.94;
-}
+.home-link:focus .header-title{opacity:0.94;}
 .home-link:hover .header-subtitle,
-.home-link:focus .header-subtitle{
-  opacity:0.88;
-}
+.home-link:focus .header-subtitle{opacity:0.88;}
 .header h1{font-size:3rem;margin-bottom:2px;}
 .header p{color:#cbd5e1;margin-top:2px;font-size:1rem;}
 .btn-secondary{
@@ -55,7 +50,6 @@ body {
   transform:translateY(-2px);
   box-shadow:0 18px 32px rgba(255,255,255,0.14);
 }
-
 .container {
   width: 100%;
   min-height: 100vh;
@@ -65,7 +59,6 @@ body {
   box-shadow: none;
   position: relative;
 }
-
 img {
   width: 100%;
   max-height: 420px;
@@ -74,18 +67,15 @@ img {
   margin-bottom: 24px;
   box-shadow: 0 18px 40px rgba(15,23,42,0.08);
 }
-
 h1 {
   margin-bottom: 12px;
   font-size: 2.8rem;
   letter-spacing: -0.02em;
 }
-
 p {
   margin-bottom: 12px;
   line-height: 1.65;
 }
-
 .btn {
   display: inline-flex;
   align-items: center;
@@ -101,23 +91,19 @@ p {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 0 14px 30px rgba(95,125,255,0.18);
 }
-
 .btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 18px 34px rgba(95,125,255,0.24);
 }
-
 .review-section {
   margin-top: 40px;
   border-top: 1px solid rgba(15,23,42,0.08);
   padding-top: 30px;
 }
-
 .review-section h3 {
   margin-bottom: 16px;
   font-size: 1.2rem;
 }
-
 .review-item {
   background: #f8fafc;
   padding: 16px;
@@ -125,14 +111,12 @@ p {
   margin-bottom: 12px;
   border: 1px solid rgba(148,163,184,0.2);
 }
-
 .star {
   font-size: 24px;
   cursor: pointer;
   color: #ffbf00;
   margin-right: 6px;
 }
-
 textarea {
   width: 100%;
   border-radius: 16px;
@@ -152,11 +136,10 @@ textarea {
     <h1 class="header-title">SoleMate</h1>
     <p class="header-subtitle">Find the perfect shoes for your feet</p>
   </a>
-  <button class="btn btn-secondary" type="button">Login</button>
+  <button class="btn btn-secondary" type="button" onclick="window.location.href='login.html'">Login</button>
 </div>
 
 <div class="container">
-
   <div id="shoeDetail"></div>
 
   <div class="review-section">
@@ -178,24 +161,41 @@ textarea {
 </div>
 
 <script>
-let shoes = [];
+// ── EMBEDDED SHOE DATA ────────────────────────────────────────────────────────
+const SHOES_DATA = [
+  {"name":"Nike Air Force 1 '07","category":"casual","width":"medium","gender":"men","price":115,"sizes":[7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12,13],"link":"https://www.nike.com/t/air-force-1-07-mens-shoes-jBrhbr/CW2288-111","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+FORCE+1+%2707.png"},
+  {"name":"Nike Court Vision Low","category":"casual","width":"medium","gender":"men","price":85,"sizes":[7,7.5,8,8.5,9,9.5,10,10.5,11,12],"link":"https://www.nike.com/t/court-vision-low-mens-shoes-FpEqIQ3A/HV2530-100","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/30196c19-7f0f-4566-bb63-94e3a3051b61/NIKE+COURT+VISION+LO.png"},
+  {"name":"Nike Killshot 2 Leather","category":"casual","width":"narrow","gender":"men","price":100,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/killshot-2-leather-mens-shoes-72M7D1/IQ9402-133","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/7a7d9dd5-851e-4401-a924-a287be7c6ab9/KILLSHOT+2+LEATHER.png"},
+  {"name":"Nike Air Max 90","category":"casual","width":"medium","gender":"men","price":135,"sizes":[7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12,13],"link":"https://www.nike.com/t/air-max-90-mens-shoes-bAZ6AeHT/DM0029-600","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/0cb8b8c5-aa97-4d3e-accc-82cbe810ec10/AIR+MAX+90.png"},
+  {"name":"Nike Revolution 8","category":"casual","width":"medium","gender":"men","price":75,"sizes":[7,8,9,10,11,12,13],"link":"https://www.nike.com/t/revolution-8-mens-road-running-shoes-U0b8oy8S/HJ9198-006","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/11a579e0-aec8-4398-88b0-a85808bd221d/NIKE+REVOLUTION+8.png"},
+  {"name":"Nike Pegasus 41","category":"running","width":"medium","gender":"men","price":117,"sizes":[7,7.5,8,8.5,9,9.5,10,10.5,11,12,13],"link":"https://www.nike.com/t/pegasus-41-mens-road-running-shoes-LMhfRGdO/IM6674-101","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/b26e2224-80ee-4cf1-a9d5-85e18af58e2c/AIR+ZOOM+PEGASUS+41.png"},
+  {"name":"Nike Vomero 18","category":"running","width":"narrow","gender":"men","price":165,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/vomero-18-mens-realtree-road-running-shoes-NzWnvcC8/IF4456-001","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/0bfaf4c8-a1a8-481d-bb08-bacd2290be64/NIKE+VOMERO+18+CM.png"},
+  {"name":"Nike Structure 26","category":"running","width":"narrow","gender":"men","price":145,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/structure-26-mens-road-running-shoes-M4sx9fru/HJ1102-102","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/cb81dc56-fc1e-4e3a-83ac-c4476dace3b8/NIKE+STRUCTURE+26.png"},
+  {"name":"Nike Journey Run","category":"running","width":"narrow","gender":"men","price":95,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/journey-run-mens-road-running-shoes-Qg3sJk/FN0228-302","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/7baa1200-f1d2-4b74-8ac6-0df00e565c89/NIKE+JOURNEY+RUN.png"},
+  {"name":"Nike Winflo 11","category":"running","width":"narrow","gender":"men","price":78,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/wio-11-womens-road-running-shoes-slS3PS/FJ9510-001","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/e34ff366-8339-4efa-a30e-f590467ed6b0/WMNS+NIKE+AIR+WINFLO+11.png"},
+  {"name":"Nike Wildhorse 10","category":"hiking","width":"narrow","gender":"men","price":165,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/wildhorse-10-mens-trail-running-shoes-juOQGIPO/FV2338-009","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d74a514b-224b-466b-a2b6-3c93aea86998/NIKE+REACTX+WILDHORSE+10.png"},
+  {"name":"Nike Pegasus Trail 5","category":"hiking","width":"medium","gender":"men","price":155,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/pegasus-trail-5-mens-trail-running-shoes-0ZrZ4D/DV3864-403","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/8ca933c9-a29a-4a52-bc06-b2ae4ce66e71/NIKE+REACTX+PEGASUS+TRAIL+5.png"},
+  {"name":"Nike ACG Ultrafly Trail","category":"hiking","width":"medium","gender":"men","price":260,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/acg-ultrafly-trail-trail-racing-shoes-uNHxL3GA/HF5668-801","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d7402d3a-aabc-4d02-a4d8-8bdba0ba60a0/NIKE+ACG+ULTRAFLY+TRAIL.png"},
+  {"name":"Nike Pegasus Trail 5 GORE-TEX","category":"hiking","width":"medium","gender":"men","price":180,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/pegasus-trail-5-gore-tex-mens-waterproof-trail-running-shoes-Tqyf11TS/FQ0908-001","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/daf0e3a9-bfaf-41c7-acd0-d28bbaf7316f/NIKE+PEGASUS+TRAIL+5+GTX.png"},
+  {"name":"Nike Zegama 2","category":"hiking","width":"narrow","gender":"men","price":153,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/zegama-2-mens-trail-running-shoes-xeTRbJ5L/FD5190-001","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/189db369-1294-4c35-bd60-7d663a74b1cc/NIKE+ZOOMX+ZEGAMA+TRAIL+2.png"},
+  {"name":"Nike Mercurial Vapor 16 Elite","category":"sports","width":"medium","gender":"men","price":270,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/mercurial-vapor-16-elite-firm-ground-low-top-soccer-cleats-aF5hbEJb/FQ1457-001","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/4360ee05-0d4d-4cc7-acf3-9194c9745773/ZM+VAPOR+16+ELITE+FG.png"},
+  {"name":"Nike Phantom 6 Low Elite 'Erling Haaland'","category":"sports","width":"wide","gender":"men","price":190,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/phantom-6-low-elite-erling-haaland-firm-ground-soccer-cleats-XmHqLlVc/HQ2332-800","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/0079ed1c-a095-4aff-92ba-9f1bd557ce3e/PHANTOM+6+LOW+ELITE+FG+EH.png"},
+  {"name":"Nike Alpha Huarache Elite 4 Mid","category":"sports","width":"medium","gender":"men","price":90,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/alpha-huarache-elite-4-mid-mens-baseball-cleats-JDPv50/FD2744-106","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/e8ecc5c3-ea1c-4501-9671-efef0c929061/ALPHA+HUARACHE+ELITE+4+MID.png"},
+  {"name":"Nike Vapor Edge 360 'Untouchable'","category":"sports","width":"medium","gender":"men","price":190,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/vapor-edge-360-untouchable-mens-football-cleats-kIP8magY/FQ0235-102","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/69663b43-0df1-4443-a39d-be7de42a2663/NIKE+VAPOR+EDGE+360+UT.png"},
+  {"name":"Nike Diamond Turf 2","category":"sports","width":"medium","gender":"men","price":210,"sizes":[7,8,9,10,11,12],"link":"https://www.nike.com/t/diamond-turf-2-football-cleats-HJIyz7lk/IF4807-001","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/fd94150e-8fca-4afe-a011-f6b66585cfaa/DIAMOND+TURF+II+TD.png"},
+  {"name":"Nike Vomero Plus","category":"sports","width":"medium","gender":"women","price":180,"sizes":[5,5.5,6,6.5,7,7.5,8,8.5,9,10],"link":"https://www.nike.com/t/vomero-plus-womens-road-running-shoes-8AH6updi/HV8154-503","image":"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ce8724a0-241e-4f47-b3d1-6a2f2ad6d7c2/W+NIKE+VOMERO+PLUS.png"}
+];
+
 let reviews = {};
 let selectedRating = 5;
 
-// Load shoes
-async function loadShoes() {
-  const res = await fetch('nike-shoes.json');
-  shoes = await res.json();
-  displayShoeDetail();
-}
-
-// Sanitize input
 function escapeHtml(text) {
-  return text.replace(/&/g, "&amp;")
-             .replace(/</g, "&lt;")
-             .replace(/>/g, "&gt;")
-             .replace(/"/g, "&quot;")
-             .replace(/'/g, "&#039;");
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
 function capitalizeWords(str) {
@@ -205,8 +205,8 @@ function capitalizeWords(str) {
 function displayShoeDetail() {
   const params = new URLSearchParams(window.location.search);
   const shoeName = params.get('shoe');
+  const shoe = SHOES_DATA.find(s => s.name === shoeName);
 
-  const shoe = shoes.find(s => s.name === shoeName);
   if(!shoe){
     document.getElementById('shoeDetail').innerHTML = '<p>Shoe not found.</p>';
     return;
@@ -239,28 +239,18 @@ function updateStars(rating) {
 updateStars(selectedRating);
 
 stars.forEach(star => {
-  star.addEventListener('mouseover', () => {
-    updateStars(parseInt(star.dataset.value));
-  });
-  star.addEventListener('mouseout', () => {
-    updateStars(selectedRating);
-  });
-  star.addEventListener('click', () => {
-    selectedRating = parseInt(star.dataset.value);
-    updateStars(selectedRating);
-  });
+  star.addEventListener('mouseover', () => updateStars(parseInt(star.dataset.value)));
+  star.addEventListener('mouseout',  () => updateStars(selectedRating));
+  star.addEventListener('click',     () => { selectedRating = parseInt(star.dataset.value); updateStars(selectedRating); });
 });
 
 function submitReview() {
   const params = new URLSearchParams(window.location.search);
   const shoeName = params.get('shoe');
   const text = document.getElementById('reviewText').value.trim();
-
   if(text === "") return alert("Please enter a comment.");
-
   if(!reviews[shoeName]) reviews[shoeName] = [];
   reviews[shoeName].push({ rating: selectedRating, text: escapeHtml(text) });
-
   document.getElementById('reviewText').value = "";
   selectedRating = 5;
   updateStars(selectedRating);
@@ -270,22 +260,19 @@ function submitReview() {
 function displayReviews(shoeName) {
   const reviewContainer = document.getElementById('reviewsList');
   reviewContainer.innerHTML = "";
-
   if(!reviews[shoeName] || reviews[shoeName].length === 0) {
     reviewContainer.innerHTML = "<p>No reviews yet.</p>";
     return;
   }
-
   reviews[shoeName].forEach(r => {
     const div = document.createElement('div');
     div.className = 'review-item';
-    div.innerHTML = `<strong>Anonymous</strong> - ${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}<br>${r.text}`;
+    div.innerHTML = `<strong>Anonymous</strong> - ${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}<br>${r.text}`;
     reviewContainer.appendChild(div);
   });
 }
 
-loadShoes();
+displayShoeDetail();
 </script>
-
 </body>
 </html>

@@ -1,68 +1,205 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login Page</title>
-  <style>
-    /* Copy the CSS styles from questionnaire.html */
-    .header {
-      background-color: #1f2937;
-      color: #fff;
-      padding: 20px;
-      text-align: center;
-    }
-    .header h1 {
-      font-size: 24px;
-      margin: 0;
-    }
-    .header p {
-      font-size: 16px;
-      margin: 0;
-    }
-    /* Add any additional styles for the login page */
-    form {
-      margin-top: 20px;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    input[type="text"],
-    input[type="password"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-    }
-    .centered-button {
-      display: block;
-      margin: 0 auto;
-      background-color: #0074D9;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
-      text-align: center;
-    }
-    .centered-button:hover {
-      background-color: #005EA2;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoleMate - Login</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:linear-gradient(145deg,#e9eff7 0%,#f6f7fb 55%,#fcf9f3 100%);
+  min-height:100vh;
+  color:#1f2937;
+}
+.header{
+  background:#1f2937;
+  color:white;
+  padding:20px 60px 18px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+.home-link{
+  display:inline-flex;
+  flex-direction:column;
+  text-decoration:none;
+  color:inherit;
+}
+.home-link:hover h1{ opacity:0.9; }
+.header h1{font-size:3rem;margin-bottom:2px;}
+.header p{color:#cbd5e1;margin-top:2px;font-size:1rem;}
+.btn{
+  padding:12px 26px;
+  background:linear-gradient(135deg,#5f7dff 0%,#6b4fc6 100%);
+  color:white;
+  border:none;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 12px 24px rgba(102,126,234,0.18);
+  transition:transform 0.25s ease, box-shadow 0.25s ease;
+  text-decoration:none;
+  font-size:1rem;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 18px 32px rgba(102,126,234,0.24);}
+.page-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:calc(100vh - 80px);
+  padding:40px 20px;
+}
+.login-card{
+  background:rgba(255,255,255,0.97);
+  border-radius:24px;
+  box-shadow:0 24px 60px rgba(15,23,42,0.10);
+  padding:48px 44px 44px;
+  width:100%;
+  max-width:420px;
+}
+.login-card h2{
+  font-size:1.9rem;
+  font-weight:800;
+  margin-bottom:6px;
+  letter-spacing:-0.02em;
+}
+.login-card .subtitle{
+  color:#64748b;
+  margin-bottom:32px;
+  font-size:0.97rem;
+}
+.field{
+  display:flex;
+  flex-direction:column;
+  margin-bottom:18px;
+}
+.field label{
+  font-weight:600;
+  font-size:0.88rem;
+  color:#374151;
+  margin-bottom:7px;
+  letter-spacing:0.01em;
+}
+.field input{
+  height:48px;
+  padding:0 16px;
+  border:1.5px solid rgba(148,163,184,0.4);
+  border-radius:14px;
+  font-size:1rem;
+  color:#0f172a;
+  background:white;
+  transition:border-color 0.2s, box-shadow 0.2s;
+  outline:none;
+  font-family:inherit;
+}
+.field input:focus{
+  border-color:#5f7dff;
+  box-shadow:0 0 0 4px rgba(95,125,255,0.12);
+}
+.btn-full{
+  width:100%;
+  margin-top:10px;
+  padding:14px;
+  font-size:1rem;
+}
+.divider{
+  text-align:center;
+  color:#94a3b8;
+  font-size:0.85rem;
+  margin:22px 0 18px;
+  position:relative;
+}
+.divider::before,.divider::after{
+  content:'';
+  position:absolute;
+  top:50%;
+  width:38%;
+  height:1px;
+  background:rgba(148,163,184,0.3);
+}
+.divider::before{left:0;}
+.divider::after{right:0;}
+.signup-link{
+  text-align:center;
+  font-size:0.9rem;
+  color:#64748b;
+  margin-top:20px;
+}
+.signup-link a{
+  color:#5f7dff;
+  font-weight:600;
+  text-decoration:none;
+}
+.signup-link a:hover{text-decoration:underline;}
+.error-msg{
+  background:#fef2f2;
+  border:1px solid #fecaca;
+  color:#dc2626;
+  border-radius:10px;
+  padding:10px 14px;
+  font-size:0.88rem;
+  margin-bottom:16px;
+  display:none;
+}
+</style>
 </head>
 <body>
-  <header class="header">
-    <h1>Login Page</h1>
+
+<div class="header">
+  <a href="index.html" class="home-link">
+    <h1>SoleMate</h1>
     <p>Find the perfect shoes for your feet</p>
-  </header>
+  </a>
+</div>
 
-  <form>
-    <input type="text" placeholder="Email" id="email">
-    <input type="password" placeholder="Password" id="password">
-    <button class="centered-button" onclick="redirectToHomePage()">Login</button>
-  </form>
+<div class="page-wrap">
+  <div class="login-card">
+    <h2>Welcome back</h2>
+    <p class="subtitle">Sign in to your SoleMate account</p>
 
-  <script>
-    function redirectToHomePage() {
-      window.location.href = "index.html";
-    }
-  </script>
+    <div class="error-msg" id="errorMsg">Please enter your email and password.</div>
+
+    <!-- FIX: onsubmit="return false" prevents page reload -->
+    <form onsubmit="return false;">
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="btn btn-full" onclick="handleLogin()">Sign In</button>
+    </form>
+
+    <div class="divider">or</div>
+    <div class="signup-link">Don't have an account? <a href="#">Create one</a></div>
+  </div>
+</div>
+
+<script>
+function handleLogin() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const errorMsg = document.getElementById('errorMsg');
+
+  if (!email || !password) {
+    errorMsg.style.display = 'block';
+    return;
+  }
+
+  errorMsg.style.display = 'none';
+  // Redirect to home after successful login
+  window.location.href = 'index.html';
+}
+</script>
+
 </body>
 </html>

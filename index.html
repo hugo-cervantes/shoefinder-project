@@ -358,44 +358,39 @@ const SHOES_DATA = [
 ];
 
 let shoes = SHOES_DATA;
-// ── FIX: filter always uses 'all' as default, never null ──────────────────────
 let filter = { width:'all', activity:'all', gender:'all', size:null, sizeUnit:'US' };
-let showUserPref = false;
-let userPref = {};
 let currentSort = 'alpha-asc';
+let pendingRecommendation = null;
 
-// ── FIX: safely read and validate localStorage pref ───────────────────────────
-let savedPref = null;
-try {
-  const raw = localStorage.getItem('userPref');
-  if (raw) {
-    savedPref = JSON.parse(raw);
+// ── Safely consume questionnaire pref from localStorage ───────────────────────
+(function() {
+  try {
+    const raw = localStorage.getItem('userPref');
+    localStorage.removeItem('userPref'); // always clear immediately
+    if (!raw) return;
+    const pref = JSON.parse(raw);
+    if (!pref || typeof pref !== 'object') return;
+    // Map questionnaire keys -> filter keys, guarding every value
+    filter.width    = (typeof pref.width    === 'string' && pref.width)    ? pref.width    : 'all';
+    filter.activity = (typeof pref.purpose  === 'string' && pref.purpose)  ? pref.purpose  : 'all';
+    filter.gender   = (typeof pref.gender   === 'string' && pref.gender)   ? pref.gender   : 'all';
+    filter.size     = (pref.size != null && pref.size !== '')               ? pref.size     : null;
+    filter.sizeUnit = (typeof pref.sizeUnit === 'string' && pref.sizeUnit) ? pref.sizeUnit : 'US';
+    // Store display text for recommendation banner
+    pendingRecommendation = pref;
+  } catch(e) {
     localStorage.removeItem('userPref');
   }
-} catch(e) {
-  localStorage.removeItem('userPref');
-}
-
-if (savedPref) {
-  userPref = savedPref;
-  showUserPref = true;
-  // ── FIX: guard against null values from questionnaire ─────────────────────
-  filter.width    = userPref.width    || 'all';
-  filter.activity = userPref.purpose  || 'all';   // questionnaire uses 'purpose', filter uses 'activity'
-  filter.gender   = userPref.gender   || 'all';
-  filter.size     = userPref.size     || null;
-  filter.sizeUnit = userPref.sizeUnit || 'US';
-}
+})();
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (savedPref) {
-    document.getElementById('widthFilter').value    = filter.width;
-    document.getElementById('activityFilter').value = filter.activity;
-    document.getElementById('genderFilter').value   = filter.gender;
-    if (filter.size) document.getElementById('filterSizeInput').value = filter.size;
-    setFilterUnit(filter.sizeUnit);
-    showRecommendation();
-  }
+  // Sync filter dropdowns to whatever filter state was set above
+  document.getElementById('widthFilter').value    = filter.width;
+  document.getElementById('activityFilter').value = filter.activity;
+  document.getElementById('genderFilter').value   = filter.gender;
+  if (filter.size) document.getElementById('filterSizeInput').value = filter.size;
+  setFilterUnit(filter.sizeUnit);
+  if (pendingRecommendation) showRecommendation(pendingRecommendation);
   displayShoes();
 });
 
@@ -405,7 +400,6 @@ function toggleFilters(){
 
 function setFilter(type, value){
   filter[type] = value || 'all';
-  showUserPref = false;
   displayShoes();
 }
 
@@ -439,10 +433,10 @@ function toUSSize(value, unit){
   return v;
 }
 
-function showRecommendation(){
-  const sizeText = userPref.size ? `, size <strong>${userPref.size} ${userPref.sizeUnit || 'US'}</strong>` : '';
+function showRecommendation(pref){
+  const sizeText = pref.size ? `, size <strong>${pref.size} ${pref.sizeUnit || 'US'}</strong>` : '';
   document.getElementById('recommendationBox').innerHTML =
-    `<p>Based on your choices: <strong>${userPref.purpose || 'any activity'}</strong> for <strong>${userPref.width || 'any width'}</strong> (${userPref.gender || 'any gender'}${sizeText}), here are your best options:</p>`;
+    `<p>Based on your choices: <strong>${pref.purpose || 'any activity'}</strong> for <strong>${pref.width || 'any width'}</strong> (${pref.gender || 'any gender'}${sizeText}), here are your best options:</p>`;
 }
 
 function toggleSort(){
